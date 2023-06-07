@@ -45,9 +45,7 @@ jobs:
             ~/Qt/Tools/CMake/bin/cmake --build . --target all
   build-gpt4all-chat-windows:
     machine:
-      image: 'windows-server-2019-cuda:current'
-      resource_class: windows.gpu.nvidia.medium
-      shell: powershell.exe -ExecutionPolicy Bypass
+      image: 'windows-server-2019:current'
     steps:
       - checkout
       - run:
