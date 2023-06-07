@@ -5,7 +5,8 @@ orbs:
 
 executors:
   linux-executor:
-    image: ubuntu-2204:2023.04.2
+    docker:
+      image: ubuntu-2204:2023.04.2
 
 jobs:
   build-gpt4all-chat-linux:
