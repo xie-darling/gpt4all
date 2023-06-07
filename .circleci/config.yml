@@ -248,8 +248,10 @@ workflows:
               only:
                 - main
   build-and-test-gpt4all-chat:
+    #jobs:
+      #- build-gpt4all-chat-linux
     jobs:
-      - build-gpt4all-chat-linux
+      - build-gpt4all-chat-windows
   # build-py-deploy:
   #   jobs:
   #     - build-py-linux:
