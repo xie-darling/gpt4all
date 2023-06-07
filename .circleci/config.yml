@@ -11,7 +11,7 @@ jobs:
       - checkout
       - restore_cache:  # this is the new step to restore cache
           keys:
-            - qt-cache-{{ .Branch }}-{{ checksum "CircleCI config file" }}
+            - qt-cache-{{ .Branch }}-{{ checksum ".circleci/config.yml" }}
             - qt-cache-{{ .Branch }}
             - qt-cache-
       - run:
@@ -23,7 +23,7 @@ jobs:
               ./qt-unified-linux-x64-4.6.0-online.run --no-force-installations --no-default-installations --no-size-checking --default-answer --accept-licenses --confirm-command --accept-obligations install qt.tools.cmake qt.tools.ifw.46 qt.tools.ninja qt.qt6.651.gcc_64 qt.qt6.651.qt5compat qt.qt6.651.debug_info qt.qt6.651.addons.qtpdf qt.qt6.651.addons.qthttpserver
             fi
       - save_cache:  # this is the new step to save cache
-          key: qt-cache-{{ .Branch }}-{{ checksum "CircleCI config file" }}
+          key: qt-cache-{{ .Branch }}-{{ checksum ".circleci/config.yml" }}
           paths:
             - ~/Qt
       - run:
@@ -202,7 +202,6 @@ workflows:
   build-and-test-gpt4all-chat:
     jobs:
       - build-gpt4all-chat-linux
-
   # build-py-deploy:
   #   jobs:
   #     - build-py-linux:
