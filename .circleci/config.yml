@@ -9,6 +9,11 @@ jobs:
       image: ubuntu-2204:2023.04.2
     steps:
       - checkout
+      - run:
+          name: Update Submodules
+          command: |
+            git submodule sync
+            git submodule update --init --recursive
       - restore_cache:  # this is the new step to restore cache
           keys:
             - qt-cache-{{ .Branch }}-{{ checksum ".circleci/config.yml" }}
