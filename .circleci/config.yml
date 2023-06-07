@@ -3,14 +3,10 @@ orbs:
   win: circleci/windows@5.0
   python: circleci/python@1.2
 
-executors:
-  linux-executor:
-    docker:
-      image: ubuntu-2204:2023.04.2
-
 jobs:
   build-gpt4all-chat-linux:
-    executor: linux-executor
+    machine:
+      image: ubuntu-2204:2023.04.2
     steps:
       - checkout
       - restore_cache:  # this is the new step to restore cache
