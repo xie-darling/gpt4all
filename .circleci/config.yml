@@ -16,9 +16,9 @@ jobs:
             git submodule update --init --recursive
       - restore_cache:  # this is the new step to restore cache
           keys:
-            - qt-cache-{{ .Branch }}-{{ checksum ".circleci/config.yml" }}
-            - qt-cache-{{ .Branch }}
-            - qt-cache-
+            - linux-qt-cache-{{ .Branch }}-{{ checksum ".circleci/config.yml" }}
+            - linux-qt-cache-{{ .Branch }}
+            - linux-qt-cache-
       - run: 
           name: Setup Linux and Dependencies
           command: |
@@ -32,7 +32,7 @@ jobs:
               ./qt-unified-linux-x64-4.6.0-online.run --no-force-installations --no-default-installations --no-size-checking --default-answer --accept-licenses --confirm-command --accept-obligations --email $QT_EMAIL --password $QT_PASSWORD install qt.tools.cmake qt.tools.ifw.46 qt.tools.ninja qt.qt6.651.gcc_64 qt.qt6.651.qt5compat qt.qt6.651.debug_info qt.qt6.651.addons.qtpdf qt.qt6.651.addons.qthttpserver
             fi
       - save_cache:  # this is the new step to save cache
-          key: qt-cache-{{ .Branch }}-{{ checksum ".circleci/config.yml" }}
+          key: linux-qt-cache-{{ .Branch }}-{{ checksum ".circleci/config.yml" }}
           paths:
             - ~/Qt
       - run:
@@ -46,7 +46,6 @@ jobs:
   build-gpt4all-chat-windows:
     machine:
       image: 'windows-server-2019-vs2019:2022.08.1'
-      resource_class: windows.medium
       shell: powershell.exe -ExecutionPolicy Bypass
     steps:
       - checkout
@@ -57,9 +56,9 @@ jobs:
             git submodule update --init --recursive
       - restore_cache:  # this is the new step to restore cache
           keys:
-            - qt-cache-{{ .Branch }}-{{ checksum ".circleci/config.yml" }}
-            - qt-cache-{{ .Branch }}
-            - qt-cache-
+            - windows-qt-cache-{{ .Branch }}-{{ checksum ".circleci/config.yml" }}
+            - windows-qt-cache-{{ .Branch }}
+            - windows-qt-cache-
       #- run: 
           #name: Setup Windows and Dependencies
           #command: |
@@ -71,7 +70,7 @@ jobs:
               qt-unified-windows-x64-4.6.0-online.exe --no-force-installations --no-default-installations --no-size-checking --default-answer --accept-licenses --confirm-command --accept-obligations --email %QT_EMAIL% --password %QT_PASSWORD% install qt.tools.cmake qt.tools.ifw.46 qt.tools.ninja qt.qt6.651.win64_msvc2019_64 qt.qt6.651.qt5compat qt.qt6.651.debug_info qt.qt6.651.addons.qtpdf qt.qt6.651.addons.qthttpserver
             )
       - save_cache:  # this is the new step to save cache
-          key: qt-cache-{{ .Branch }}-{{ checksum ".circleci/config.yml" }}
+          key: windows-qt-cache-{{ .Branch }}-{{ checksum ".circleci/config.yml" }}
           paths:
             - ~/Qt
       #- run:
