@@ -199,6 +199,10 @@ workflows:
             branches:
               only:
                 - main
+  build-and-test-gpt4all-chat:
+    jobs:
+      - build-gpt4all-chat-linux
+
   # build-py-deploy:
   #   jobs:
   #     - build-py-linux:
