@@ -3,7 +3,41 @@ orbs:
   win: circleci/windows@5.0
   python: circleci/python@1.2
 
+executors:
+  linux-executor:
+    image: ubuntu-2204:2023.04.2
+
 jobs:
+  build-gpt4all-chat-linux:
+    executor: linux-executor
+    steps:
+      - checkout
+      - restore_cache:  # this is the new step to restore cache
+          keys:
+            - qt-cache-{{ .Branch }}-{{ checksum "CircleCI config file" }}
+            - qt-cache-{{ .Branch }}
+            - qt-cache-
+      - run:
+          name: Setup Linux and Dependencies
+          command: |
+            if [ ! -d "~/Qt/6.5.1/gcc_64" ]; then
+              wget https://gpt4all.io/ci/qt-unified-linux-x64-4.6.0-online.run
+              bash
+              ./qt-unified-linux-x64-4.6.0-online.run --no-force-installations --no-default-installations --no-size-checking --default-answer --accept-licenses --confirm-command --accept-obligations install qt.tools.cmake qt.tools.ifw.46 qt.tools.ninja qt.qt6.651.gcc_64 qt.qt6.651.qt5compat qt.qt6.651.debug_info qt.qt6.651.addons.qtpdf qt.qt6.651.addons.qthttpserver
+            fi
+      - save_cache:  # this is the new step to save cache
+          key: qt-cache-{{ .Branch }}-{{ checksum "CircleCI config file" }}
+          paths:
+            - ~/Qt
+      - run:
+          name: Build
+          command: |
+            export CMAKE_PREFIX_PATH=~/Qt/6.5.1/gcc_64/lib/cmake
+            mkdir build
+            cd build
+            cmake -G "Ninja" ../gpt4all-chat/CMakeLists.txt
+            ninja
+
   build-py-docs:
     docker:
       - image: circleci/python:3.8
@@ -32,8 +66,6 @@ jobs:
       - run:
           name: Invalidate docs.gpt4all.io cloudfront
           command: aws cloudfront create-invalidation --distribution-id E1STQOW63QL2OH --paths "/*"
-
-            
 
   build-py-linux:
     docker:
