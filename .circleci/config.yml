@@ -18,7 +18,7 @@ jobs:
           name: Setup Linux and Dependencies
           command: |
             if [ ! -d "~/Qt/6.5.1/gcc_64" ]; then
-              sudo apt install -y libxcb-icccm4
+              sudo apt install -y libxcb-icccm4 libxcb-image0
               wget https://gpt4all.io/ci/qt-unified-linux-x64-4.6.0-online.run
               chmod +x qt-unified-linux-x64-4.6.0-online.run
               ./qt-unified-linux-x64-4.6.0-online.run --no-force-installations --no-default-installations --no-size-checking --default-answer --accept-licenses --confirm-command --accept-obligations install qt.tools.cmake qt.tools.ifw.46 qt.tools.ninja qt.qt6.651.gcc_64 qt.qt6.651.qt5compat qt.qt6.651.debug_info qt.qt6.651.addons.qtpdf qt.qt6.651.addons.qthttpserver
