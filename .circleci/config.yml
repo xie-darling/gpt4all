@@ -36,8 +36,8 @@ jobs:
             export CMAKE_PREFIX_PATH=~/Qt/6.5.1/gcc_64/lib/cmake
             mkdir build
             cd build
-            ~/Qt/Tools/CMake/bin/cmake -G "Ninja" ../gpt4all-chat/CMakeLists.txt
-            ~/Qt/Tools/Ninja/ninja
+            ~/Qt/Tools/CMake/bin/cmake -S ../gpt4all-chat -B .
+            ~/Qt/Tools/CMake/bin/cmake --build . --target all
 
   build-py-docs:
     docker:
