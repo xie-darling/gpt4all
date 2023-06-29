@@ -251,11 +251,11 @@ bool replit_model_load(const std::string & fname, std::istream &fin, replit_mode
     // load hparams
     {
         auto & hparams = model.hparams;
-        fin.read((char *) &hparams.n_vocab,     sizeof(hparams.n_vocab));
-        fin.read((char *) &hparams.n_ctx,       sizeof(hparams.n_ctx));
         fin.read((char *) &hparams.n_embd,      sizeof(hparams.n_embd));
+        fin.read((char *) &hparams.n_ctx,       sizeof(hparams.n_ctx));
         fin.read((char *) &hparams.n_head,      sizeof(hparams.n_head));
         fin.read((char *) &hparams.n_layer,     sizeof(hparams.n_layer));
+        fin.read((char *) &hparams.n_vocab,     sizeof(hparams.n_vocab));
         fin.read((char *) &hparams.ftype,       sizeof(hparams.ftype));
 
         const int32_t qntvr = hparams.ftype / GGML_QNT_VERSION_FACTOR;
@@ -362,7 +362,7 @@ bool replit_model_load(const std::string & fname, std::istream &fin, replit_mode
 
         // map by name
         model.tensors["transformer.wte.weight"] = model.wte_weight;
-        model.tensors["transformer.ln_f.weight"] = model.ln_f_weight;
+        model.tensors["transformer.norm_f.weight"] = model.ln_f_weight;
 
         for (int i = 0; i < n_layer; ++i) {
             auto & layer = model.layers[i];
@@ -375,13 +375,13 @@ bool replit_model_load(const std::string & fname, std::istream &fin, replit_mode
             layer.c_mlp_mlp_down_weight = ggml_new_tensor_2d(ctx, wtype, 4 * n_embd, n_embd);
 
             // map by name
-            model.tensors["transformer.blocks." + std::to_string(i) + ".ln_1.weight"] = layer.ln_1_weight;
+            model.tensors["transformer.blocks." + std::to_string(i) + ".norm_1.weight"] = layer.ln_1_weight;
             model.tensors["transformer.blocks." + std::to_string(i) + ".attn.Wqkv.weight"] = layer.c_attn_wqkv_weight;
             model.tensors["transformer.blocks." + std::to_string(i) + ".attn.out_proj.weight"] =
                 layer.c_attn_out_proj_weight;
-            model.tensors["transformer.blocks." + std::to_string(i) + ".ln_2.weight"] = layer.ln_2_weight;
-            model.tensors["transformer.blocks." + std::to_string(i) + ".mlp.mlp_up.weight"] = layer.c_mlp_mlp_up_weight;
-            model.tensors["transformer.blocks." + std::to_string(i) + ".mlp.mlp_down.weight"] =
+            model.tensors["transformer.blocks." + std::to_string(i) + ".norm_2.weight"] = layer.ln_2_weight;
+            model.tensors["transformer.blocks." + std::to_string(i) + ".ffn.up_proj.weight"] = layer.c_mlp_mlp_up_weight;
+            model.tensors["transformer.blocks." + std::to_string(i) + ".ffn.down_proj.weight"] =
                 layer.c_mlp_mlp_down_weight;
         }
     }
