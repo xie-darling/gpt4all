@@ -53,6 +53,9 @@ void LLModel::prompt(const std::string &prompt,
     promptCtx.n_predict = std::min(promptCtx.n_predict, promptCtx.n_ctx - (int) embd_inp.size());
     promptCtx.n_past = std::min(promptCtx.n_past, promptCtx.n_ctx);
 
+    std::cerr << "Calling prompt in shared with n_past=" << promptCtx.n_past << "\n";
+    fflush(stderr);
+
     // process the prompt in batches
     size_t i = 0;
     while (i < embd_inp.size()) {

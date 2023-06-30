@@ -308,7 +308,7 @@ class LLModel:
             )
 
         if reset_n_past:
-            self.context.n_past = 0
+            self.context['n_past'] = 0
 
         # Put response tokens into an output queue
         def _generator_response_callback(token_id, response):

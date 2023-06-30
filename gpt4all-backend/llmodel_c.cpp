@@ -4,6 +4,7 @@
 #include <cstring>
 #include <cerrno>
 #include <utility>
+#include <iostream>
 
 
 struct LLModelWrapper {
@@ -127,6 +128,9 @@ void llmodel_prompt(llmodel_model model, const char *prompt,
         std::bind(&response_wrapper, std::placeholders::_1, std::placeholders::_2, reinterpret_cast<void*>(response_callback));
     std::function<bool(bool)> recalc_func =
         std::bind(&recalculate_wrapper, std::placeholders::_1, reinterpret_cast<void*>(recalculate_callback));
+
+    std::cerr << "Calling prompt with n_past=" << ctx->n_past << "\n";
+    fflush(stderr);
 
     // Copy the C prompt context
     wrapper->promptContext.n_past = ctx->n_past;
