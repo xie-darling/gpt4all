@@ -128,6 +128,35 @@ static bool kv_cache_init(
     return true;
 }
 
+struct gptj_session {
+    struct llm_kv_cache kv_self;
+    llm_buffer eval_buf;
+    llm_buffer scr0_buf;
+    llm_buffer scr1_buf;
+
+    void init(const gptj_model &model) {
+        // key + value memory
+        {
+            const auto &hparams = model.hparams;
+            if (!kv_cache_init(hparams, kv_self, GGML_TYPE_F16,
+                               model.hparams.n_ctx)) {
+                fprintf(stderr,
+                        "%s: kv_cache_init() failed for self-attention cache\n",
+                        __func__);
+                throw std::runtime_error("could not allocate session memory");
+            }
+
+            const size_t memory_size =
+                ggml_nbytes(kv_self.k) + ggml_nbytes(kv_self.v);
+            printf("%s: kv self size  = %7.2f MB\n", __func__,
+                   memory_size / 1024.0 / 1024.0);
+
+            scr0_buf.resize(256u * 1024 * 1024);
+            scr1_buf.resize(256u * 1024 * 1024);
+        }
+    }
+};
+
 // load the model's weights from a stream
 bool gptj_model_load(const std::string &fname, std::istream &fin, gptj_model & model, gpt_vocab & vocab, size_t * mem_req = nullptr) {
     printf("%s: loading model from '%s' - please wait ...\n", __func__, fname.c_str());
