@@ -23,9 +23,9 @@ The embedding model will automatically be downloaded if not installed.
     [0.034696947783231735, -0.07192722707986832, 0.06923297047615051, ...]
     ```
 ### Speed of embedding generation
-The following table lists the generation speed for text documents of N tokens captured on an Intel i913900HX CPU with DDR5 5600 running with 8 threads under stable load.
+The following table lists the generation speed for text documents captured on an Intel i913900HX CPU with DDR5 5600 running with 8 threads under stable load.
 
-| Tokens          | 128  | 512  | 2048 | 8129 | 2^14 |
+| Tokens          | 128  | 512  | 2048 | 8129 | 16,384 |
 | --------------- | ---- | ---- | ---- | ---- | ---- |
 | Wall time (s)   | .02  | .08  | .24  | .96  | 1.9  |
 | Tokens / Second | 6508 | 6431 | 8622 | 8509 | 8369 |
