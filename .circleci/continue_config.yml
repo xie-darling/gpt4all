@@ -650,6 +650,7 @@ jobs:
             yarn run test
       - run: 
           command: |
+            ls -R .
             cd gpt4all-bindings/typescript
             # excluding llmodel. nodejs bindings dont need llmodel.dll
             mkdir -p runtimes/win32-x64/native
