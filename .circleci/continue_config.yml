@@ -792,8 +792,8 @@ workflows:
         filters:
           branches:
             only:
-              requires:
-                - build-bindings-backend-windows
+        requires:
+            - build-bindings-backend-windows
       - build-csharp-macos:
           filters:
             branches:
