@@ -789,11 +789,11 @@ workflows:
           requires:
             - build-bindings-backend-linux
       - build-csharp-windows:
-        filters:
-          branches:
-            only:
-        requires:
-            - build-bindings-backend-windows
+          filters:
+            branches:
+              only:
+          requires:
+              - build-bindings-backend-windows
       - build-csharp-macos:
           filters:
             branches:
