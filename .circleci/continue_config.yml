@@ -645,9 +645,9 @@ jobs:
           pkg-manager: yarn
           override-ci-command: yarn install
       - run: 
-        command: | 
-          cd gpt4all-bindings/typescript
-          yarn run test
+          command: | 
+            cd gpt4all-bindings/typescript
+            yarn run test
       - run: 
           command: |
             cd gpt4all-bindings/typescript
