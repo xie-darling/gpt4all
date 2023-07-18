@@ -650,16 +650,15 @@ jobs:
             yarn run test
       - run: 
           command: |
-            ls -R /tmp/
             cd gpt4all-bindings/typescript
             # excluding llmodel. nodejs bindings dont need llmodel.dll
             mkdir -p runtimes/win32-x64/native
-            cp /tmp/workspace/runtimes/win-x64_msvc/*-*.dll runtimes/win-x64/native/ 
+            cp /tmp/gpt4all-backend/runtimes/win-x64_msvc/*-*.dll runtimes/win-x64/native/ 
             mkdir -p runtimes/linux-x64/native 
-            cp /tmp/workspace/runtimes/linux-x64/*-*.so runtimes/linux-x64/native/ 
+            cp /tmp/gpt4all-backend/runtimes/linux-x64/*-*.so runtimes/linux-x64/native/ 
             mkdir -p runtimes/osx/native
-            cp /tmp/workspace/runtimes/osx-x64/*-*.dylib runtimes/osx/native/
-            cp /tmp/workspace/runtimes/osx-x64/*.metal runtimes/osx/native/
+            cp /tmp/gpt4all-backend/runtimes/osx-x64/*-*.dylib runtimes/osx/native/
+            cp /tmp/gpt4all-backend/runtimes/osx-x64/*.metal runtimes/osx/native/
             ls -Ra gpt4all-bindings/typescript/runtimes
 #     - run:
 #          name: Publish to NPM
