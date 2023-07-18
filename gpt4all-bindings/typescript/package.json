@@ -13,6 +13,9 @@
     "docs:build": "documentation readme ./src/gpt4all.d.ts --parse-extension js d.ts --format md --section documentation --readme-file ../python/docs/gpt4all_typescript.md",
     "postdocs:build": "node scripts/docs.js"
   },
+  "files": [
+    "src/**/*"   
+  ],
   "dependencies": {
     "md5-file": "^5.0.0",
     "mkdirp": "^3.0.1",
