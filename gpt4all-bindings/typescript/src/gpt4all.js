@@ -85,6 +85,18 @@ function createPrompt(messages, hasDefaultHeader, hasDefaultFooter) {
     return fullPrompt.join('\n');
 }
 
+function getEmbedder() {
+    // const dirName = path.dirname(__dirname);
+    // console.log(__dirname);
+    // console.log(dirName);
+    const llmOptions = {
+        model_name: appendBinSuffixIfMissing("ggml-all-MiniLM-L6-v2-f16.bin"),
+        model_path: __dirname,
+        library_path: __dirname,
+    };
+    const llmodel = new LLModel(llmOptions);
+    return llmodel;
+}
 
 function createEmbedding(llmodel, text) {
     return llmodel.embed(text)
@@ -136,6 +148,7 @@ module.exports = {
     DEFAULT_LIBRARIES_DIRECTORY,
     DEFAULT_DIRECTORY,
     LLModel,
+    getEmbedder,
     createCompletion,
     createEmbedding,
     downloadModel,
