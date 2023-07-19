@@ -1,26 +1,21 @@
 {
-  "name": "gpt4all",
-  "version": "2.0.0rc",
-  "packageManager": "yarn@3.5.1",
+  "name": "gpt4all-demo",
+  "version": "0.0.1",
+  "description": "NOT OFFICIALLY SUPPORTED gpt4all derivative package",
   "main": "src/gpt4all.js",
-  "repository": "nomic-ai/gpt4all",
   "scripts": {
-    "test": "jest",
-    "build:backend": "node scripts/build.js",
-    "build": "node-gyp-build",
-    "prebuild": "node scripts/prebuild.js",
-    "predocs:build": "node scripts/docs.js",
-    "docs:build": "documentation readme ./src/gpt4all.d.ts --parse-extension js d.ts --format md --section documentation --readme-file ../python/docs/gpt4all_typescript.md",
-    "postdocs:build": "node scripts/docs.js"
+    "install": "node-gyp-build"
   },
+  "gypfile": true,
   "files": [
-    "src/**/*"   
+    "src/**/*",
+    "build/**/*"
   ],
   "dependencies": {
-    "md5-file": "^5.0.0",
-    "mkdirp": "^3.0.1",
-    "node-addon-api": "^6.1.0",
-    "node-gyp-build": "^4.6.0"
+        "md5-file": "^5.0.0",
+        "mkdirp": "^3.0.1",
+        "node-addon-api": "^6.1.0",
+        "node-gyp-build": "^4.6.0"
   },
   "devDependencies": {
     "@types/node": "^20.1.5",
@@ -35,8 +30,5 @@
   "prettier": {
     "endOfLine": "lf",
     "tabWidth": 4
-  },
-  "jest": {
-    "verbose": true
   }
 }
