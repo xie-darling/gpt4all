@@ -18,13 +18,12 @@ public:
   Napi::Value getType(const Napi::CallbackInfo& info);
   Napi::Value IsModelLoaded(const Napi::CallbackInfo& info);
   Napi::Value StateSize(const Napi::CallbackInfo& info);
-  //void Finalize(Napi::Env env) override;
   /**
    * Prompting the model. This entails spawning a new thread and adding the response tokens
    * into a thread local string variable.
    */
   Napi::Value Prompt(const Napi::CallbackInfo& info);
-  void PromptStream(const Napi::CallbackInfo& info);
+  Napi::Value PromptStream(const Napi::CallbackInfo& info);
   void SetThreadCount(const Napi::CallbackInfo& info);
   void Dispose(const Napi::CallbackInfo& info);
   Napi::Value getName(const Napi::CallbackInfo& info);

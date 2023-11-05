@@ -1,4 +1,5 @@
 #include "tools.h"
+#include <ostream>
 
 namespace Tools {
     llmodel_prompt_context JSObjectToContext(Napi::Object const& inputObject) {
@@ -54,5 +55,25 @@ namespace Tools {
         js_object.Set("repeat_last_n", promptContext.repeat_last_n);
         js_object.Set("context_erase", promptContext.context_erase);
         return js_object;
+    }
+
+    void print_llmodel_context(llmodel_prompt_context const& pc, std::ostream& out) {
+        out << "{\n";
+        out << "  \"logits\": " << reinterpret_cast<void*>(pc.logits) << ",\n";
+        out << "  \"logits_size\": " << pc.logits_size << ",\n";
+        out << "  \"tokens\": " << reinterpret_cast<void*>(pc.tokens) << ",\n";
+        out << "  \"tokens_size\": " << pc.tokens_size << ",\n";
+        out << "  \"n_past\": " << pc.n_past << ",\n";
+        out << "  \"n_ctx\": " << pc.n_ctx << ",\n";
+        out << "  \"n_predict\": " << pc.n_predict << ",\n";
+        out << "  \"top_k\": " << pc.top_k << ",\n";
+        out << "  \"top_p\": " << pc.top_p << ",\n";
+        out << "  \"temp\": " << pc.temp << ",\n";
+        out << "  \"n_batch\": " << pc.n_batch << ",\n";
+        out << "  \"repeat_penalty\": " << pc.repeat_penalty << ",\n";
+        out << "  \"repeat_last_n\": " << pc.repeat_last_n << ",\n";
+        out << "  \"context_erase\": " << pc.context_erase << "\n";
+        out << "}\n";
+
     }
 };

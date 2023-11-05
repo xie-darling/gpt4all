@@ -1,4 +1,5 @@
 #include "index.h"
+#include "stream.h"
 
 namespace fs = std::filesystem;
 
@@ -286,9 +287,32 @@ Napi::Value NodeModelWrapper::GetRequiredMemory(const Napi::CallbackInfo& info)
     return threadSafeContext->deferred_.Promise();
   }
 
-  void NodeModelWrapper::PromptStream(const Napi::CallbackInfo& info) {
+  Napi::Value NodeModelWrapper::PromptStream(const Napi::CallbackInfo& info) {
       auto env = info.Env();
-
+      std::string question;
+      if(info[0].IsString()) {
+          question = info[0].As<Napi::String>().Utf8Value();
+      } else {
+          Napi::Error::New(env, "invalid string argument").ThrowAsJavaScriptException();
+          return env.Undefined();
+      }
+      //defaults copied from python bindings
+      llmodel_prompt_context promptContext; 
+      if(info[1].IsObject()) {
+         auto inputObject = info[1].As<Napi::Object>();
+          // Extract and assign the properties
+         if (inputObject.Has("logits") || inputObject.Has("tokens")) {
+             Napi::Error::New(env, "Invalid input: 'logits' or 'tokens' properties are not allowed").ThrowAsJavaScriptException();
+             return env.Undefined();
+         }
+         promptContext = Tools::JSObjectToContext(inputObject); 
+       
+      } else {
+          Napi::Error::New(info.Env(), "Expect argument 1 to be an object").ThrowAsJavaScriptException();
+          return env.Undefined();
+      }
+      //TODO:
+      return Napi::Value();
 
   }
   void NodeModelWrapper::Dispose(const Napi::CallbackInfo& info) {
@@ -306,6 +330,7 @@ Napi::Value NodeModelWrapper::GetRequiredMemory(const Napi::CallbackInfo& info)
   Napi::Value NodeModelWrapper::getName(const Napi::CallbackInfo& info) {
     return Napi::String::New(info.Env(), name);
   }
+
   Napi::Value NodeModelWrapper::ThreadCount(const Napi::CallbackInfo& info) {
     return Napi::Number::New(info.Env(), llmodel_threadCount(GetInference()));
   }
