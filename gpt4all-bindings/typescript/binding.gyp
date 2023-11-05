@@ -15,6 +15,8 @@
         "../../gpt4all-backend/llmodel_c.cpp",
         "../../gpt4all-backend/llmodel.cpp",
         "prompt.cc",
+        "stream.cc",
+        "tools.cc",
         "index.cc",
        ],
       "conditions": [

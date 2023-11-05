@@ -8,12 +8,12 @@
 #include <iostream>
 #include <atomic>
 #include <memory>
+
 struct PromptWorkContext {
     std::string question;
     llmodel_model inference_;
     llmodel_prompt_context prompt_params;
     std::string res;
-
 };
 
 struct TsfnContext {

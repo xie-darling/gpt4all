@@ -1,5 +1,6 @@
 #include "index.h"
 
+namespace fs = std::filesystem;
 
 Napi::Function NodeModelWrapper::GetClass(Napi::Env env) {
     Napi::Function self = DefineClass(env, "LLModel", {
@@ -99,6 +100,7 @@ Napi::Value NodeModelWrapper::GetRequiredMemory(const Napi::CallbackInfo& info)
     auto result = llmodel_gpu_init_gpu_device_by_string(GetInference(), converted_value, gpu_device_identifier.c_str());
     return Napi::Boolean::New(env, result);
   }
+
   Napi::Value NodeModelWrapper::HasGpuDevice(const Napi::CallbackInfo& info) 
   {
     return Napi::Boolean::New(info.Env(), llmodel_has_gpu_device(GetInference()));
@@ -241,54 +243,23 @@ Napi::Value NodeModelWrapper::GetRequiredMemory(const Napi::CallbackInfo& info)
     if(info[0].IsString()) {
         question = info[0].As<Napi::String>().Utf8Value();
     } else {
-        Napi::Error::New(info.Env(), "invalid string argument").ThrowAsJavaScriptException();
-        return info.Env().Undefined();
+        Napi::Error::New(env, "invalid string argument").ThrowAsJavaScriptException();
+        return env.Undefined();
     }
     //defaults copied from python bindings
-    llmodel_prompt_context promptContext = {
-             .logits = nullptr,
-             .tokens = nullptr,
-             .n_past = 0,
-             .n_ctx = 1024,
-             .n_predict = 128,
-             .top_k = 40,
-             .top_p = 0.9f,
-             .temp = 0.72f,
-             .n_batch = 8,
-             .repeat_penalty = 1.0f,
-             .repeat_last_n = 10,
-             .context_erase = 0.5
-         };
-    if(info[1].IsObject())
-    {
+    llmodel_prompt_context promptContext; 
+    if(info[1].IsObject()) {
        auto inputObject = info[1].As<Napi::Object>();
-             
         // Extract and assign the properties
        if (inputObject.Has("logits") || inputObject.Has("tokens")) {
-           Napi::Error::New(info.Env(), "Invalid input: 'logits' or 'tokens' properties are not allowed").ThrowAsJavaScriptException();
+           Napi::Error::New(env, "Invalid input: 'logits' or 'tokens' properties are not allowed").ThrowAsJavaScriptException();
            return info.Env().Undefined();
        }
-             // Assign the remaining properties
-       if(inputObject.Has("n_past")) 
-            promptContext.n_past = inputObject.Get("n_past").As<Napi::Number>().Int32Value();
-       if(inputObject.Has("n_ctx")) 
-            promptContext.n_ctx = inputObject.Get("n_ctx").As<Napi::Number>().Int32Value();
-       if(inputObject.Has("n_predict"))
-            promptContext.n_predict = inputObject.Get("n_predict").As<Napi::Number>().Int32Value();
-       if(inputObject.Has("top_k"))
-            promptContext.top_k = inputObject.Get("top_k").As<Napi::Number>().Int32Value();
-       if(inputObject.Has("top_p")) 
-            promptContext.top_p = inputObject.Get("top_p").As<Napi::Number>().FloatValue();
-       if(inputObject.Has("temp")) 
-            promptContext.temp = inputObject.Get("temp").As<Napi::Number>().FloatValue();
-       if(inputObject.Has("n_batch")) 
-            promptContext.n_batch = inputObject.Get("n_batch").As<Napi::Number>().Int32Value();
-       if(inputObject.Has("repeat_penalty")) 
-            promptContext.repeat_penalty = inputObject.Get("repeat_penalty").As<Napi::Number>().FloatValue();
-       if(inputObject.Has("repeat_last_n")) 
-            promptContext.repeat_last_n = inputObject.Get("repeat_last_n").As<Napi::Number>().Int32Value();
-       if(inputObject.Has("context_erase")) 
-            promptContext.context_erase = inputObject.Get("context_erase").As<Napi::Number>().FloatValue();
+       promptContext = Tools::JSObjectToContext(inputObject); 
+     
+    } else {
+        Napi::Error::New(info.Env(), "Expect argument 1 to be an object").ThrowAsJavaScriptException();
+        return env.Undefined();
     }
     //copy to protect llmodel resources when splitting to new thread
     llmodel_prompt_context copiedPrompt = promptContext;
@@ -313,6 +284,12 @@ Napi::Value NodeModelWrapper::GetRequiredMemory(const Napi::CallbackInfo& info)
     );
     threadSafeContext->nativeThread = std::thread(threadEntry, threadSafeContext);
     return threadSafeContext->deferred_.Promise();
+  }
+
+  void NodeModelWrapper::PromptStream(const Napi::CallbackInfo& info) {
+      auto env = info.Env();
+
+
   }
   void NodeModelWrapper::Dispose(const Napi::CallbackInfo& info) {
     llmodel_model_destroy(inference_);

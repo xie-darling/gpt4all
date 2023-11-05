@@ -7,7 +7,8 @@
 #include <memory>
 #include <filesystem>
 #include <set>
-namespace fs = std::filesystem;
+#include "tools.h"
+
 
 
 class NodeModelWrapper: public Napi::ObjectWrap<NodeModelWrapper> {
@@ -23,6 +24,7 @@ public:
    * into a thread local string variable.
    */
   Napi::Value Prompt(const Napi::CallbackInfo& info);
+  void PromptStream(const Napi::CallbackInfo& info);
   void SetThreadCount(const Napi::CallbackInfo& info);
   void Dispose(const Napi::CallbackInfo& info);
   Napi::Value getName(const Napi::CallbackInfo& info);
